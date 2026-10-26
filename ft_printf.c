@@ -6,81 +6,77 @@
 /*   By: basayoub <basayoub@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/24 23:30:51 by basayoub          #+#    #+#             */
-/*   Updated: 2026/10/25 23:16:07 by basayoub         ###   ########.fr       */
+/*   Updated: 2026/10/27 02:34:54 by basayoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-size_t	ft_putchar(int c, size_t i)
+int	ft_putchar(int c)
 {
 	char h;
 
 	h = (char)c;
 	write (1, &h, 1);
-	return (++i);
+	return (1);
 }
 
-size_t	ft_putstr(char *str, size_t j)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		write(1, &str[i], 1);
-		i++;
-	}
-	return (++j);
-}
-size_t	ft_putnbr(int n, size_t i)
+int	ft_putnbr(int n)
 {
 	char	m;
+	int count;
 
+	count = 0;
 	if (n == -2147483648)
 	{
-		write (1, "-2147483648", 11);
-		return (++i);
+		return(write (1, "-2147483648", 11));
 	}
 	if (n < 0)
 	{
-		write (1, "-", 1);
+		count += write (1, "-", 1);
 		n = -n;
 	}
 	if (n > 9)
-		ft_putnbr(n / 10, i);
+		 count += ft_putnbr(n / 10);
 	m = n % 10 + '0';
-	write (1, &m, 1);
-	i++;
-	return (i);
+	 count += write (1, &m, 1);
+	return (count);
 }
-
-void	iffer(size_t i, va_list	bob, const char *f)
+int	elser(size_t i, const char *f, int count)
+{
+	write(1, &f[i], 1);
+	count++;
+	i++;
+	return (count);
+}
+int	iffer(size_t i, va_list	bob, const char *f, int count)
 {
 	while (f[i])
 	{
-		if (f[i] == '%' && f[i + 1] == 'c')
-			i = ft_putchar(va_arg(bob, int), i);
-		else if (f[i] == '%' && f[i + 1] == 's')
-			i = ft_putstr(va_arg(bob, char *), i);
-		else if (f[i] == '%' && (f[i + 1] == 'd' || f[i + 1] == 'i'))
-			i = ft_putnbr(va_arg(bob, int), i);
-		else if (f[i] == '%' && f[i + 1] == 'u')
-			i = ft_putunsigned(va_arg(bob, int), i);
+		if (f[i] == '%' && f[i + 1] == 'c' && ++i)
+			count += ft_putchar(va_arg(bob, int));
+		else if (f[i] == '%' && f[i + 1] == 's' && ++i)
+			count += ft_putstr(va_arg(bob, char *));
+		else if (f[i] == '%' && (f[i + 1] == 'd' || f[i + 1] == 'i') && ++i)
+			count += ft_putnbr(va_arg(bob, int));
+		else if (f[i] == '%' && f[i + 1] == 'u' && ++i)
+			count += ft_putunsigned(va_arg(bob, int));
 		else if (f[i] == '%' && f[i + 1] == '%' && ++i)
-			write (1, "%", 1);	
-		else if (f[i] == '%' && f[i + 1] == 'p')
-			i = ft_putvoid(va_arg(bob, void *), i);
-		else if (f[i] == '%' && f[i + 1] == 'x')
-			i = ft_putlowhexa(va_arg(bob, unsigned int), i);
-		else if (f[i] == '%' && f[i + 1] == 'X')
-			i = ft_putuphexa(va_arg(bob, unsigned int), i);
+			count += write (1, "%", 1);
+		else if (f[i] == '%' && f[i + 1] == 'p' && ++i)
+			count += ft_putvoid(va_arg(bob, void *));
+		else if (f[i] == '%' && f[i + 1] == 'x' && ++i)
+			count += ft_putlowhexa(va_arg(bob, unsigned int));
+		else if (f[i] == '%' && f[i + 1] == 'X' && ++i)
+			count += ft_putuphexa(va_arg(bob, unsigned int)); 
+		else if (f[i] == '%')
+			i++;
 		else
-			write (1, &f[i], 1);
+			count = elser(i,f,count);
 		i++;
-    	}
+    }
+	return (count);
 }
-
 int	ft_printf(const char *f, ...)
 {
     size_t	i;
@@ -88,13 +84,16 @@ int	ft_printf(const char *f, ...)
 
     i = 0;
     va_start(bob,f);
-    iffer(i,bob,f);
+    i = iffer(i,bob,f,0);
     va_end(bob);
-    return (i);
+    return ((int)i);
 }
 /*int main()
 {
-	char *u = "th";
-	ft_printf("the world\nputchar : %c\nputstr : %s\nputnumber : (i) %i \t(d) %d\nunsigned : %u\nthe :%%\npointer : %p\nlow hexa : %x\nUP HEXA : %X",'k',"str love ",-42,42,163,u,-148,-148);
-	printf("\n** %p **\n", u);
+	void *a = "17";
+//	char *u = "th";
+//	printf("/%d\\\n",ft_printf(" %p ",a));
+//	printf("+%d+",printf(" %p ",a));
+	printf("--%d--",ft_printf("the world\nputchar : %c\nputstr : %s\nputnumber : (i) %i \t(d) %d\nunsigned : %u\nthe :%%\npointer : %p\nlow hexa : %x\nUP HEXA : %X",'k',"str love ",-42,42,163,a,-148,-148));
+	printf("==%d==",printf("\n\nthe world\nputchar : %c\nputstr : %s\nputnumber : (i) %i \t(d) %d\nunsigned : %u\nthe :%%\npointer : %p\nlow hexa : %x\nUP HEXA : %X",'k',"str love ",-42,42,163,a,-148,-148)-2);
 }*/

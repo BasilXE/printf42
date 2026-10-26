@@ -6,7 +6,7 @@
 /*   By: basayoub <basayoub@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/24 23:32:34 by basayoub          #+#    #+#             */
-/*   Updated: 2026/10/25 22:10:25 by basayoub         ###   ########.fr       */
+/*   Updated: 2026/10/27 02:23:46 by basayoub         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,16 @@
 #include <unistd.h>
 #include <stdio.h>
 
-size_t	ft_putnbr(int n, size_t i);
-size_t	ft_putstr(char *str, size_t j);
-size_t	ft_putchar(int c, size_t i);
-void	iffer(size_t i, va_list	bob, const char *f);
+int	ft_putnbr(int n);
+int	ft_putstr(char *str);
+int	ft_putchar(int c);
+int	ft_putvoidhexa(unsigned long x);
+int	iffer(size_t i, va_list	bob, const char *f, int count);
 int ft_printf(const char *f, ...);
-size_t	ft_putunsigned(int u, size_t i);
-size_t	ft_putvoid(void *p, size_t i);
-size_t	ft_putlowhexa(unsigned int x, size_t q);
-size_t	ft_putuphexa(unsigned int x, size_t q);
+int	ft_putunsigned(int u);
+int	ft_putvoid(void *p);
+int	ft_putlowhexa(unsigned int x);
+int	ft_putuphexa(unsigned int x);
 
 
 #endif

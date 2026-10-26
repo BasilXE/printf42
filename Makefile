@@ -6,14 +6,14 @@
 #    By: basayoub <basayoub@student.42amman.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/10/25 23:14:09 by basayoub          #+#    #+#              #
-#    Updated: 2026/10/25 23:15:32 by basayoub         ###   ########.fr        #
+#    Updated: 2026/10/27 02:27:25 by basayoub         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 CC = cc
 CF = -Wall -Wextra -Werror
-SRC = ft_printf.c ft_printfparts.c
+SRC = ft_printf.c ft_printfparts.c ft_printfpart2.c
 
 OBJ = $(SRC:.c=.o)
 AR = ar
